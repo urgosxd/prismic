@@ -1,7 +1,25 @@
-/**
- * Implement Gatsby's Browser APIs in this file.
- *
- * See: https://www.gatsbyjs.org/docs/browser-apis/
- */
+import React from "react"
+import "./main.css"
+import { createGlobalStyle, ThemeProvider } from "styled-components"
+import theme from "./src/js/theme"
+import { UsuarioProvider } from "./src/js/store"
 
-// You can delete this file if you're not using it
+const Globalstyle = createGlobalStyle`
+  *{
+    box-sizing: border;
+    margin:0;
+    padding: 0;
+    
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    
+  }
+ 
+`
+
+export const wrapRootElement = ({ element }) => (
+  <ThemeProvider theme={theme}>
+    <Globalstyle />
+    <UsuarioProvider>{element}</UsuarioProvider>
+  </ThemeProvider>
+)
