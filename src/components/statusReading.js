@@ -1,7 +1,8 @@
 import React, { useRef, useState, useEffect } from "react"
 import { useOnClickOutside } from "../js/hooks"
 import { throttle } from "lodash"
-import { TocDiv, TocLink, TocIcon, Title, Toggle } from "../styles/components"
+import { Accordion } from "react-bootstrap"
+import { TocDiv, TocLink, Toggle, TocLinkStatic, Contenedor } from "../styles"
 
 export const ReadingProgress = ({ target }) => {
   const [readingProgress, setReadingProgress] = useState(0)
@@ -35,7 +36,7 @@ export const ReadingProgress = ({ target }) => {
   return <div className="readingBar" style={{ width: `${readingProgress}%` }} />
 }
 
-export const MYTOC = ({ headingSelector, getTitle, getDepth, ...rest }) => {
+export const TOCinteractive = ({}) => {
   const accumulateOffsetTop = (el, totalOffset = 0) => {
     while (el) {
       totalOffset += el.offsetTop - el.scrollTop + el.clientTop
@@ -44,7 +45,7 @@ export const MYTOC = ({ headingSelector, getTitle, getDepth, ...rest }) => {
     return totalOffset
   }
 
-  const { throttleTime = 200, tocTitle = `Contents` } = rest
+  const throttleTime = 200
 
   const [headings, setHeadings] = useState({
     titles: [],
@@ -60,18 +61,20 @@ export const MYTOC = ({ headingSelector, getTitle, getDepth, ...rest }) => {
 
   useOnClickOutside(ref, () => setOpen(false))
 
+  const selector =
+    "section.contenido > h1,section.contenido > h2,section.contenido > h3,section.contenido > h4"
+
   useEffect(() => {
-    const selector = ["h1", "h2", "h3", "h4", "h5"]
     const nodes = Array.from(document.querySelectorAll(selector))
     console.log(nodes)
     const titles = nodes.map(node => ({
-      title: getTitle ? getTitle(node) : node.innerText,
-      depth: getDepth ? getDepth(node) : Number(node.nodeName[1]),
+      title: node.innerText,
+      depth: Number(node.nodeName[1]),
     }))
     console.log(titles)
     const minDepth = Math.min(...titles.map(h => h.depth))
     setHeadings({ titles, nodes, minDepth })
-  }, [headingSelector, getTitle, getDepth])
+  }, [selector])
 
   useEffect(() => {
     const scrollHandler = throttle(() => {
@@ -88,34 +91,98 @@ export const MYTOC = ({ headingSelector, getTitle, getDepth, ...rest }) => {
     return () => window.removeEventListener("scroll", scrollHandler)
   }, [headings])
   return (
-    <>
-      <Toggle opener open={open} onClick={() => setOpen(true)} size="1.6em" />
+    <Contenedor>
+      <Toggle onClick={() => setOpen(true)} size="1.6em" />
+      <Toggle closer onClick={() => setOpen(false)} />
       <TocDiv ref={ref} open={open}>
-        <Title>
-          <TocIcon />
-
-          <Toggle closer onClick={() => setOpen(false)} />
-        </Title>
-        <nav>
-          {headings.titles.map(({ title, depth }, index) => (
-            <TocLink
-              key={title}
-              active={active === index}
-              depth={depth - headings.minDepth}
-              onClick={event => {
-                event.preventDefault()
-                setOpen(false)
-                headings.nodes[index].scrollIntoView({
-                  behavior: `smooth`,
-                  block: `center`,
-                })
-              }}
-            >
-              {title}
-            </TocLink>
-          ))}
-        </nav>
+        <div>
+          {headings.titles.map(({ title, depth }, index) =>
+            depth < 2 ? (
+              <li>
+                <TocLink
+                  key={title}
+                  active={active === index}
+                  depth={depth - headings.minDepth}
+                  onClick={event => {
+                    event.preventDefault()
+                    setOpen(false)
+                    headings.nodes[index].scrollIntoView({
+                      behavior: `smooth`,
+                      block: `center`,
+                    })
+                  }}
+                >
+                  {index + 1}.{title}
+                </TocLink>
+              </li>
+            ) : (
+              <li>
+                <TocLink
+                  key={title}
+                  active={active === index}
+                  depth={depth - headings.minDepth}
+                  onClick={event => {
+                    event.preventDefault()
+                    setOpen(false)
+                    headings.nodes[index].scrollIntoView({
+                      behavior: `smooth`,
+                      block: `center`,
+                    })
+                  }}
+                >
+                  {title}
+                </TocLink>
+              </li>
+            )
+          )}
+        </div>
       </TocDiv>
-    </>
+    </Contenedor>
+  )
+}
+
+export const TOCstatic = ({}) => {
+  const [headings, setHeadings] = useState({
+    titles: [],
+    nodes: [],
+    minDepth: 0,
+  })
+
+  const selector =
+    "section.contenido > h1,section.contenido > h2,section.contenido > h3,section.contenido > h4"
+  useEffect(() => {
+    const nodes = Array.from(document.querySelectorAll(selector))
+    console.log(nodes)
+    const titles = nodes.map(node => ({
+      title: node.innerText,
+      depth: Number(node.nodeName[1]),
+    }))
+    console.log(titles)
+    const minDepth = Math.min(...titles.map(h => h.depth))
+    setHeadings({ titles, nodes, minDepth })
+  }, [selector])
+
+  return (
+    <ol className="paperIndice">
+      {headings.titles.map(({ title, depth }, index) => (
+        <li>
+          <TocLinkStatic
+            key={title}
+            depth={depth - headings.minDepth}
+            onClick={event => {
+              event.preventDefault()
+              headings.nodes[index].scrollIntoView({
+                behavior: `smooth`,
+                block: `center`,
+              })
+            }}
+          >
+            Parte {index + 1}
+            <p>{title}</p>
+          </TocLinkStatic>
+        </li>
+      ))}
+      <div></div>
+    </ol>
   )
 }
