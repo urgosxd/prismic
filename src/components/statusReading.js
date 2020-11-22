@@ -1,8 +1,14 @@
 import React, { useRef, useState, useEffect } from "react"
 import { useOnClickOutside } from "../js/hooks"
 import { throttle } from "lodash"
-import { Accordion } from "react-bootstrap"
-import { TocDiv, TocLink, Toggle, TocLinkStatic, Contenedor } from "../styles"
+import {
+  TocDiv,
+  TocLink,
+  Toggle,
+  TocLinkStatic,
+  Contenedor,
+  TocDivLi,
+} from "../styles"
 
 export const ReadingProgress = ({ target }) => {
   const [readingProgress, setReadingProgress] = useState(0)
@@ -10,30 +16,31 @@ export const ReadingProgress = ({ target }) => {
     if (!target.current) {
       return
     }
-    const element = target.current
-    const totalHeight =
-      element.clientHeight - element.offsetTop - window.innerHeight
-    const windowScrollTop =
-      window.pageYOffset ||
-      document.documentElement.scrollTop ||
-      document.body.scrollTop ||
-      0
-
-    if (windowScrollTop === 0) {
-      return setReadingProgress(0)
-    }
-    if (windowScrollTop > totalHeight) {
-      return setReadingProgress(100)
-    }
-
-    setReadingProgress((windowScrollTop / totalHeight) * 100)
+    const { top, height } = target.current.getBoundingClientRect()
+    console.log(readingProgress)
+    const progress =
+      (top / (height - typeof window !== "undefined" && window.innerHeight)) *
+      100
+    const translateValue = progress < -100 ? 0 : -100 - progress
+    console.log(progress)
+    setReadingProgress(
+      translateValue < -100 ? -100 : top > 0 ? 0 : translateValue
+    )
   }
   useEffect(() => {
-    window.addEventListener("scroll", scrollListener)
-    return () => window.removeEventListener("scroll", scrollListener)
+    typeof window !== "undefined" &&
+      window.addEventListener("scroll", scrollListener)
+    return () =>
+      typeof window !== "undefined" &&
+      window.removeEventListener("scroll", scrollListener)
   })
 
-  return <div className="readingBar" style={{ width: `${readingProgress}%` }} />
+  return (
+    <div
+      className="readingBar"
+      style={{ transform: `translateX(${readingProgress}%)` }}
+    />
+  )
 }
 
 export const TOCinteractive = ({}) => {
@@ -62,11 +69,14 @@ export const TOCinteractive = ({}) => {
   useOnClickOutside(ref, () => setOpen(false))
 
   const selector =
-    "section.contenido > h1,section.contenido > h2,section.contenido > h3,section.contenido > h4"
+    "section.contenido > h1,section.contenido > h2,section.contenido > h3,section.contenido > h4,section.contenido > h5"
 
   useEffect(() => {
-    const nodes = Array.from(document.querySelectorAll(selector))
-    console.log(nodes)
+    const nodes = Array.from(
+      typeof document !== "undefined" && document.querySelectorAll(selector)
+    )
+
+    console.log(nodes[1].tagName)
     const titles = nodes.map(node => ({
       title: node.innerText,
       depth: Number(node.nodeName[1]),
@@ -83,59 +93,44 @@ export const TOCinteractive = ({}) => {
       const offsets = nodes.map(el => accumulateOffsetTop(el))
       const activeIndex = offsets.findIndex(
         //window ojo
-        offset => offset > window.scrollY + 0.8 * window.innerHeight
+        offset =>
+          offset > typeof window !== "undefined" &&
+          typeof window !== "undefined" &&
+          window.scrollY + 0.6 * typeof window !== "undefined" &&
+          window.innerHeight
       )
       setActive(activeIndex === -1 ? titles.length - 1 : activeIndex - 1)
     }, throttleTime)
-    window.addEventListener("scroll", scrollHandler)
-    return () => window.removeEventListener("scroll", scrollHandler)
+    typeof window !== "undefined" &&
+      window.addEventListener("scroll", scrollHandler)
+    return () =>
+      typeof window !== "undefined" &&
+      window.removeEventListener("scroll", scrollHandler)
   }, [headings])
   return (
     <Contenedor>
       <Toggle onClick={() => setOpen(true)} size="1.6em" />
       <Toggle closer onClick={() => setOpen(false)} />
       <TocDiv ref={ref} open={open}>
-        <div>
-          {headings.titles.map(({ title, depth }, index) =>
-            depth < 2 ? (
-              <li>
-                <TocLink
-                  key={title}
-                  active={active === index}
-                  depth={depth - headings.minDepth}
-                  onClick={event => {
-                    event.preventDefault()
-                    setOpen(false)
-                    headings.nodes[index].scrollIntoView({
-                      behavior: `smooth`,
-                      block: `center`,
-                    })
-                  }}
-                >
-                  {index + 1}.{title}
-                </TocLink>
-              </li>
-            ) : (
-              <li>
-                <TocLink
-                  key={title}
-                  active={active === index}
-                  depth={depth - headings.minDepth}
-                  onClick={event => {
-                    event.preventDefault()
-                    setOpen(false)
-                    headings.nodes[index].scrollIntoView({
-                      behavior: `smooth`,
-                      block: `center`,
-                    })
-                  }}
-                >
-                  {title}
-                </TocLink>
-              </li>
-            )
-          )}
-        </div>
+        {headings.titles.map(({ title, depth }, index) => (
+          <li>
+            <TocLink
+              key={title}
+              active={active === index}
+              depth={depth - headings.minDepth}
+              onClick={event => {
+                event.preventDefault()
+                setOpen(false)
+                headings.nodes[index].scrollIntoView({
+                  behavior: `smooth`,
+                  block: `center`,
+                })
+              }}
+            >
+              {index + 1}.{title}
+            </TocLink>
+          </li>
+        ))}
       </TocDiv>
     </Contenedor>
   )
@@ -148,10 +143,11 @@ export const TOCstatic = ({}) => {
     minDepth: 0,
   })
 
-  const selector =
-    "section.contenido > h1,section.contenido > h2,section.contenido > h3,section.contenido > h4"
+  const selector = "section.contenido > h1,section.contenido > h2"
   useEffect(() => {
-    const nodes = Array.from(document.querySelectorAll(selector))
+    const nodes = Array.from(
+      typeof document !== "undefined" && document.querySelectorAll(selector)
+    )
     console.log(nodes)
     const titles = nodes.map(node => ({
       title: node.innerText,
@@ -164,24 +160,49 @@ export const TOCstatic = ({}) => {
 
   return (
     <ol className="paperIndice">
-      {headings.titles.map(({ title, depth }, index) => (
-        <li>
-          <TocLinkStatic
-            key={title}
-            depth={depth - headings.minDepth}
-            onClick={event => {
-              event.preventDefault()
-              headings.nodes[index].scrollIntoView({
-                behavior: `smooth`,
-                block: `center`,
-              })
-            }}
-          >
-            Parte {index + 1}
-            <p>{title}</p>
-          </TocLinkStatic>
-        </li>
-      ))}
+      {headings.minDepth === 1
+        ? headings.titles.map(
+            ({ title, depth }, index) =>
+              depth === 1 && (
+                <li>
+                  <TocLinkStatic
+                    key={title}
+                    depth={depth - headings.minDepth}
+                    onClick={event => {
+                      event.preventDefault()
+                      headings.nodes[index].scrollIntoView({
+                        behavior: `smooth`,
+                        block: `center`,
+                      })
+                    }}
+                  >
+                    Parte {index + 1}
+                    <p>{title}</p>
+                  </TocLinkStatic>
+                </li>
+              )
+          )
+        : headings.titles.map(
+            ({ title, depth }, index) =>
+              depth === 2 && (
+                <li>
+                  <TocLinkStatic
+                    key={title}
+                    depth={depth - headings.minDepth}
+                    onClick={event => {
+                      event.preventDefault()
+                      headings.nodes[index].scrollIntoView({
+                        behavior: `smooth`,
+                        block: `center`,
+                      })
+                    }}
+                  >
+                    Parte {index + 1}
+                    <p>{title}</p>
+                  </TocLinkStatic>
+                </li>
+              )
+          )}
       <div></div>
     </ol>
   )

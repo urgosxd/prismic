@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import {
   LAYOUT,
   ReadingProgress,
   TOCinteractive,
   TOCstatic,
+  Avatar,
 } from "../components"
 import { Container, Row, Col } from "react-bootstrap"
 import { useUsuario } from "../js/store"
@@ -27,11 +28,17 @@ const Post = ({ data, pageContext }) => {
   const { buscar, actualizar } = useUsuario()
 
   const [contador, setContador] = useState()
+  const [show, setShow] = useState(false)
 
   useEffect(() => {
     buscar(data.strapiPosts.strapiId).then(el => setContador(el))
+    let timer = setTimeout(() => {
+      setShow(true)
+    }, 2500)
+    return () => {
+      clearTimeout(timer)
+    }
   }, [buscar])
-
   const todo = id => {
     setContador(contador + 1)
     actualizar(id, contador)
@@ -39,6 +46,8 @@ const Post = ({ data, pageContext }) => {
   //BAR CONSTS
 
   const target = React.createRef()
+
+  //AVATAR
 
   return (
     <LAYOUT>
@@ -50,7 +59,19 @@ const Post = ({ data, pageContext }) => {
           }}
         >
           <Row>
-            <Col lg={3}></Col>
+            <Col lg={3}>
+              <Avatar
+                state={show}
+                setState={setShow}
+                username={data.strapiPosts.users[0].username}
+                info={data.strapiPosts.users[0].info}
+                avatar={data.strapiPosts.users[0].avatar.publicURL}
+                social={[
+                  data.strapiPosts.users[0].instagram.link,
+                  data.strapiPosts.users[0].twitter.link,
+                ]}
+              />
+            </Col>
             <Col lg={6}>
               <h1>{data.strapiPosts.titulo}</h1>
               <div>
@@ -59,17 +80,25 @@ const Post = ({ data, pageContext }) => {
                 </p>
                 <div>
                   <ul className="hashtags">
-                    <li></li>
+                    {data.strapiPosts.tags.map(el => (
+                      <li key={el.tag}>{el.tag}</li>
+                    ))}
                   </ul>
+                </div>
+                <div className="avatar">
+                  Autor:
+                  <span onClick={() => setShow(true)}>
+                    {data.strapiPosts.users[0].username}
+                  </span>
                 </div>
                 <div className="infoPremature">
                   <div className="claps">
                     <img src={data.file.publicURL} />
 
                     <span>{contador}</span>
+
+                    <span>{data.strapiPosts.publishAt.date}</span>
                   </div>
-                  <div className="chistesito"></div>
-                  <p className="date"></p>
                 </div>
               </div>
 
@@ -79,44 +108,34 @@ const Post = ({ data, pageContext }) => {
         </section>
 
         <section className="paper">
-          <Row>
+          <Row noGutters={true}>
             <Col lg={3}>
               <TOCinteractive />
             </Col>
-            <Col lg={6}>
+            <Col lg={6} className="ccc">
               <section
                 ref={target}
                 dangerouslySetInnerHTML={{ __html: ddd }}
                 className="contenido"
               />
-              {contador}
-              <button onClick={() => todo(data.strapiPosts.strapiId)}>
-                CLICK ME!
-              </button>
-              <div className="clapp"></div>
+
+              <div className="claps">
+                <span>Clap!</span>
+                <img
+                  src={data.file.publicURL}
+                  onClick={() => todo(data.strapiPosts.strapiId)}
+                />
+
+                {contador}
+              </div>
             </Col>
             <Col lg={3}> caca</Col>
           </Row>
         </section>
         <ReadingProgress target={target} />
-        <section className="feedback">
-          <Row>
-            <Col></Col>
-            <Col>
-              <div>
-                <div></div>
-                <div>
-                  <h2>asd</h2>
-                  <p></p>
-                  <p></p>
-                  <div> </div>
-                </div>
-              </div>
-            </Col>
-            <Col></Col>
-          </Row>
-        </section>
-        <DiscussionEmbed shortname={disqusShortname} config={disqusConfig} />
+        <div className="discutir">
+          <DiscussionEmbed shortname={disqusShortname} config={disqusConfig} />
+        </div>
       </Container>
     </LAYOUT>
   )
@@ -134,8 +153,27 @@ export const postQuery = graphql`
         }
       }
       titulo
+      publishAt {
+        date
+      }
       preview {
         description
+      }
+      tags {
+        tag
+      }
+      users {
+        avatar {
+          publicURL
+        }
+        info
+        username
+        instagram {
+          link
+        }
+        twitter {
+          link
+        }
       }
       strapiId
     }

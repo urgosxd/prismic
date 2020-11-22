@@ -9,13 +9,13 @@ export const TocDiv = styled.ol`
   height: max-content;
   font-size: 1.25rem;
   line-height: 150%;
-
-  z-index: 3;
-  line-height: 2.2em;
   & li {
     list-style: none;
     margin-bottom: 1rem;
   }
+  z-index: 3;
+  line-height: 2.2em;
+
   ${props => props.theme.devices.phone} {
     bottom: 1em;
     left: 1em;
