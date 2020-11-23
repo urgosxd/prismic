@@ -55,7 +55,7 @@ const Post = ({ data, pageContext }) => {
         <section
           className="introduction"
           style={{
-            backgroundImage: `url(${data.imageSharp.fixed.src})`,
+            backgroundImage: `url(${data.bck.publicURL})`,
           }}
         >
           <Row>
@@ -177,10 +177,9 @@ export const postQuery = graphql`
       }
       strapiId
     }
-    imageSharp(id: { eq: "ad85a23a-9ad9-5679-881d-9a69fe7bdb08" }) {
-      fixed(width: 1400, quality: 100) {
-        src
-      }
+    bck: file(id: { eq: "87bbe3d6-6a71-55ff-8308-5ce0e58f4be3" }) {
+      id
+      publicURL
     }
     file(id: { eq: "3a30abb2-1014-5033-b945-6ce87f84e765" }) {
       id
