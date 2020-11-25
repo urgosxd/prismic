@@ -54,9 +54,11 @@ const Post = ({ data, pageContext }) => {
       <Container fluid={true} style={{ padding: 0 }}>
         <section
           className="introduction"
-          style={{
-            backgroundImage: `url(${pageContext.bac})`,
-          }}
+          style={
+            {
+              // backgroundImage: `url(${pageContext.bac})`,
+            }
+          }
         >
           <Row>
             <Col lg={3}>
@@ -93,7 +95,7 @@ const Post = ({ data, pageContext }) => {
                 </div>
                 <div className="infoPremature">
                   <div className="claps">
-                    <img src={pageContext.clap} />
+                    {/* <img src={pageContext.clap} /> */}
 
                     <span>{contador}</span>
 
@@ -121,10 +123,10 @@ const Post = ({ data, pageContext }) => {
 
               <div className="claps">
                 <span>Clap!</span>
-                <img
+                {/* <img
                   src={pageContext.clap}
                   onClick={() => todo(data.strapiPosts.strapiId)}
-                />
+                /> */}
 
                 {contador}
               </div>

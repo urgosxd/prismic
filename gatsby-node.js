@@ -45,13 +45,6 @@ exports.createPages = async ({ graphql, actions }) => {
           }
         }
       }
-
-      bac: file(id: { eq: "3f688dea-2579-5907-99ef-8123a201ded9" }) {
-        publicURL
-      }
-      clap: file(id: { eq: "3a30abb2-1014-5033-b945-6ce87f84e765" }) {
-        publicURL
-      }
     }
   `)
 
@@ -61,8 +54,6 @@ exports.createPages = async ({ graphql, actions }) => {
 
   //Extract Querys
   const posts = result.data.allStrapiPosts.edges
-  const bac = result.data.bac.publicURL
-  const clap = result.data.clap.publicURL
   //Load Templates
   const indexTemplate = path.resolve("./src/templates/index.js")
   const postTemplate = path.resolve("./src/templates/post.js")
@@ -75,9 +66,6 @@ exports.createPages = async ({ graphql, actions }) => {
       component: postTemplate,
       context: {
         slug: toSlug(node.titulo),
-        clap: clap,
-        nose: "nose",
-        bac: bac,
       },
     })
   })
