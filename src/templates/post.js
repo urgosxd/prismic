@@ -15,7 +15,7 @@ import { graphql } from "gatsby"
 const Post = ({ data, pageContext }) => {
   //REACTMARKDOWN TOC
   const ddd = data.strapiPosts.childStrapiPostsContent.internal.content
-  console.log(data)
+  console.log(pageContext)
   //DISQUS CONSTS
   const disqusShortname = `blog-hkos9nos5v`
   const disqusConfig = {
@@ -55,7 +55,7 @@ const Post = ({ data, pageContext }) => {
         <section
           className="introduction"
           style={{
-            backgroundImage: `url(${data.bck.publicURL})`,
+            backgroundImage: `url(${pageContext.bac})`,
           }}
         >
           <Row>
@@ -93,7 +93,7 @@ const Post = ({ data, pageContext }) => {
                 </div>
                 <div className="infoPremature">
                   <div className="claps">
-                    <img src={data.file.publicURL} />
+                    <img src={pageContext.clap} />
 
                     <span>{contador}</span>
 
@@ -122,7 +122,7 @@ const Post = ({ data, pageContext }) => {
               <div className="claps">
                 <span>Clap!</span>
                 <img
-                  src={data.file.publicURL}
+                  src={pageContext.clap}
                   onClick={() => todo(data.strapiPosts.strapiId)}
                 />
 
@@ -176,14 +176,6 @@ export const postQuery = graphql`
         }
       }
       strapiId
-    }
-    bck: file(id: { eq: "87bbe3d6-6a71-55ff-8308-5ce0e58f4be3" }) {
-      id
-      publicURL
-    }
-    file(id: { eq: "3a30abb2-1014-5033-b945-6ce87f84e765" }) {
-      id
-      publicURL
     }
   }
 `
