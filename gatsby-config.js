@@ -2,36 +2,6 @@ const { createProxyMiddleware } = require("http-proxy-middleware")
 
 require("dotenv").config()
 
-const blogQuery = `{
-  allStrapiPosts {
-    nodes {
-      id
-      childSlug{
-        internal{
-          content
-        }
-      }
-      preview {
-        titulo
-        featuredImage {
-          formats {
-            small {
-              url
-            }
-          }
-        }
-      }
-    }
-  }
-}`
-
-const queries = [
-  {
-    query: blogQuery,
-    transformer: ({ data }) => data.allStrapiPosts.nodes,
-  },
-]
-
 module.exports = {
   siteMetadata: {
     title: `Gatsby Default Starter`,
@@ -73,13 +43,9 @@ module.exports = {
     {
       resolve: `gatsby-plugin-algolia`,
       options: {
-        appId: process.env.ALGOLIA_APP_ID,
-        // Use Admin API key without GATSBY_ prefix, so that the key isn't exposed in the application
-        // Tip: use Search API key with GATSBY_ prefix to access the service from within components
-        apiKey: process.env.ALGOLIA_API_KEY,
-        indexName: process.env.ALGOLIA_INDEX_NAME, // for all queries
-        queries,
-        chunkSize: 10000, // default: 1000
+        appId: process.env.GATSBY_ALGOLIA_APP_ID,
+        apiKey: process.env.ALGOLIA_ADMIN_KEY,
+        queries: require("./src/utils/algolia-queries"),
       },
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality

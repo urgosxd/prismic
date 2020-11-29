@@ -10,8 +10,8 @@ export const POSTCARD = ({ hit }) => {
       <p>
         <Highlight hit={hit} attribute="preview.titulo" tagName="mark" />
       </p>
-      <img src={rat.featuredImage.formats.small.url} />
-      <Link to={hit.childSlug.internal.content}>GO!</Link>
+      <img src={hit.publicURL} />
+      <Link to={hit.content.content}>GO!</Link>
     </div>
   )
 }

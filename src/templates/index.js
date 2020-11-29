@@ -10,8 +10,8 @@ const Index = ({ data, location, pageContext }) => {
   const posts = data.allStrapiPosts.edges
   console.log(posts)
   const searchClient = algoliasearch(
-    "896EKI828Y",
-    "df28a548bfac4d7443e486003da378ca"
+    process.env.GATSBY_ALGOLIA_APP_ID,
+    process.env.GATSBY_ALGOLIA_SEARCH_KEY
   )
 
   return (
