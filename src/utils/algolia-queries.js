@@ -11,7 +11,7 @@ const blogQuery = `{
         preview {
           titulo
           featuredImage{
-              publicURL
+            url
           }
         }
       }
@@ -25,7 +25,7 @@ function pageToAlgoliaRecord({
     childSlug: { internal: content },
     preview: {
       titulo,
-      featuredImage: { publicURL },
+      featuredImage: { url },
     },
   },
 }) {
@@ -33,7 +33,7 @@ function pageToAlgoliaRecord({
     objectID: id,
     content,
     titulo,
-    publicURL,
+    url,
   }
 }
 
