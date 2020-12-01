@@ -177,10 +177,10 @@ export const postQuery = graphql`
       }
       strapiId
     }
-    clap: file(id: { eq: "3a30abb2-1014-5033-b945-6ce87f84e765" }) {
+    clap: file(name: { eq: "clap-svgrepo-com" }) {
       publicURL
     }
-    bac: file(id: { eq: "3f688dea-2579-5907-99ef-8123a201ded9" }) {
+    bac: file(name: { eq: "back" }) {
       publicURL
     }
   }
