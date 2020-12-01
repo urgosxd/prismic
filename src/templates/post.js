@@ -54,11 +54,9 @@ const Post = ({ data, pageContext }) => {
       <Container fluid={true} style={{ padding: 0 }}>
         <section
           className="introduction"
-          style={
-            {
-              // backgroundImage: `url(${pageContext.bac})`,
-            }
-          }
+          style={{
+            backgroundImage: `url(${data.bac.publicURL})`,
+          }}
         >
           <Row>
             <Col lg={3}>
@@ -95,7 +93,7 @@ const Post = ({ data, pageContext }) => {
                 </div>
                 <div className="infoPremature">
                   <div className="claps">
-                    {/* <img src={pageContext.clap} /> */}
+                    <img src={data.clap.publicURL} />
 
                     <span>{contador}</span>
 
@@ -123,10 +121,10 @@ const Post = ({ data, pageContext }) => {
 
               <div className="claps">
                 <span>Clap!</span>
-                {/* <img
-                  src={pageContext.clap}
+                <img
+                  src={data.clap.publicURL}
                   onClick={() => todo(data.strapiPosts.strapiId)}
-                /> */}
+                />
 
                 {contador}
               </div>
@@ -178,6 +176,12 @@ export const postQuery = graphql`
         }
       }
       strapiId
+    }
+    clap: file(id: { eq: "3a30abb2-1014-5033-b945-6ce87f84e765" }) {
+      publicURL
+    }
+    bac: file(id: { eq: "3f688dea-2579-5907-99ef-8123a201ded9" }) {
+      publicURL
     }
   }
 `

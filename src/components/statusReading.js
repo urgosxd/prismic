@@ -72,9 +72,7 @@ export const TOCinteractive = ({}) => {
     "section.contenido > h1,section.contenido > h2,section.contenido > h3,section.contenido > h4,section.contenido > h5"
 
   useEffect(() => {
-    const nodes = Array.from(
-      typeof document !== "undefined" && document.querySelectorAll(selector)
-    )
+    const nodes = Array.from(document.querySelectorAll(selector))
 
     console.log(nodes[1].tagName)
     const titles = nodes.map(node => ({
@@ -93,11 +91,7 @@ export const TOCinteractive = ({}) => {
       const offsets = nodes.map(el => accumulateOffsetTop(el))
       const activeIndex = offsets.findIndex(
         //window ojo
-        offset =>
-          offset > typeof window !== "undefined" &&
-          typeof window !== "undefined" &&
-          window.scrollY + 0.6 * typeof window !== "undefined" &&
-          window.innerHeight
+        offset => offset > window.scrollY + 0.6 * window.innerHeight
       )
       setActive(activeIndex === -1 ? titles.length - 1 : activeIndex - 1)
     }, throttleTime)
