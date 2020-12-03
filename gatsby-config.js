@@ -1,5 +1,3 @@
-const { createProxyMiddleware } = require("http-proxy-middleware")
-
 require("dotenv").config()
 
 module.exports = {
@@ -17,7 +15,8 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     },
-
+    `gatsby-plugin-sharp`,
+    `gatsby-transformer-sharp`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
@@ -28,14 +27,6 @@ module.exports = {
         theme_color: `#663399`,
         display: `minimal-ui`,
         icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
-      },
-    },
-    {
-      resolve: "gatsby-source-strapi",
-      options: {
-        apiURL: "https://strapi-josue.herokuapp.com", //"https://strapi2-heroku.herokuapp.com",
-        queryLimit: 1000,
-        contentTypes: ["posts"],
       },
     },
     {
@@ -50,15 +41,4 @@ module.exports = {
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
   ],
-  developMiddleware: app => {
-    app.use(
-      "/.netlify/functions/",
-      createProxyMiddleware({
-        target: "http://localhost:9000",
-        pathRewrite: {
-          "/.netlify/functions/": "",
-        },
-      })
-    )
-  },
 }

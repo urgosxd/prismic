@@ -14,35 +14,29 @@ import { graphql } from "gatsby"
 
 const Post = ({ data, pageContext }) => {
   //REACTMARKDOWN TOC
-  const ddd = data.strapiPosts.childStrapiPostsContent.internal.content
+
   console.log(pageContext)
   //DISQUS CONSTS
   const disqusShortname = `blog-hkos9nos5v`
-  const disqusConfig = {
-    identifier: data.strapiPosts.strapiId,
-    title: data.strapiPosts.titulo,
-    url: `${siteUrl}/${pageContext.slug}`,
-  }
+  // const disqusConfig = {
+  //   identifier: data.strapiPosts.strapiId,
+  //   title: data.strapiPosts.titulo,
+  //   url: `${siteUrl}/${pageContext.slug}`,
+  // }
 
   //SISTEM CLAP
-  const { buscar, actualizar } = useUsuario()
 
-  const [contador, setContador] = useState()
   const [show, setShow] = useState(false)
 
   useEffect(() => {
-    buscar(data.strapiPosts.strapiId).then(el => setContador(el))
     let timer = setTimeout(() => {
       setShow(true)
     }, 2500)
     return () => {
       clearTimeout(timer)
     }
-  }, [buscar])
-  const todo = id => {
-    setContador(contador + 1)
-    actualizar(id, contador)
-  }
+  })
+
   //BAR CONSTS
 
   const target = React.createRef()
@@ -52,52 +46,38 @@ const Post = ({ data, pageContext }) => {
   return (
     <LAYOUT>
       <Container fluid={true} style={{ padding: 0 }}>
-        <section
-          className="introduction"
-          style={{
-            backgroundImage: `url(${data.bac.publicURL})`,
-          }}
-        >
+        <section className="introduction">
           <Row>
             <Col lg={3}>
               <Avatar
                 state={show}
                 setState={setShow}
-                username={data.strapiPosts.users[0].username}
-                info={data.strapiPosts.users[0].info}
-                avatar={data.strapiPosts.users[0].avatar.publicURL}
-                social={[
-                  data.strapiPosts.users[0].instagram.link,
-                  data.strapiPosts.users[0].twitter.link,
-                ]}
+                username={}
+                info={}
+                avatar={}
+                social={}
               />
             </Col>
             <Col lg={6}>
-              <h1>{data.strapiPosts.titulo}</h1>
+              <h1></h1>
               <div>
-                <p className="description">
-                  {data.strapiPosts.preview.description}
-                </p>
+                <p className="description"></p>
                 <div>
                   <ul className="hashtags">
-                    {data.strapiPosts.tags.map(el => (
-                      <li key={el.tag}>{el.tag}</li>
-                    ))}
+                    <li></li>
                   </ul>
                 </div>
                 <div className="avatar">
                   Autor:
-                  <span onClick={() => setShow(true)}>
-                    {data.strapiPosts.users[0].username}
-                  </span>
+                  <span onClick={() => setShow(true)}></span>
                 </div>
                 <div className="infoPremature">
                   <div className="claps">
                     <img src={data.clap.publicURL} />
 
-                    <span>{contador}</span>
+                    <span></span>
 
-                    <span>{data.strapiPosts.publishAt.date}</span>
+                    <span></span>
                   </div>
                 </div>
               </div>
@@ -113,29 +93,20 @@ const Post = ({ data, pageContext }) => {
               <TOCinteractive />
             </Col>
             <Col lg={6} className="ccc">
-              <section
-                ref={target}
-                dangerouslySetInnerHTML={{ __html: ddd }}
-                className="contenido"
-              />
+              <section ref={target} className="contenido" />
 
               <div className="claps">
                 <span>Clap!</span>
-                <img
-                  src={data.clap.publicURL}
-                  onClick={() => todo(data.strapiPosts.strapiId)}
-                />
-
-                {contador}
+                <img src={data.clap.publicURL} />
               </div>
             </Col>
             <Col lg={3}> caca</Col>
           </Row>
         </section>
         <ReadingProgress target={target} />
-        <div className="discutir">
+        {/* <div className="discutir">
           <DiscussionEmbed shortname={disqusShortname} config={disqusConfig} />
-        </div>
+        </div> */}
       </Container>
     </LAYOUT>
   )
@@ -143,45 +114,4 @@ const Post = ({ data, pageContext }) => {
 
 export default Post
 
-export const postQuery = graphql`
-  query($slug: String!) {
-    strapiPosts(childSlug: { internal: { content: { eq: $slug } } }) {
-      content
-      childStrapiPostsContent {
-        internal {
-          content
-        }
-      }
-      titulo
-      publishAt {
-        date
-      }
-      preview {
-        description
-      }
-      tags {
-        tag
-      }
-      users {
-        avatar {
-          publicURL
-        }
-        info
-        username
-        instagram {
-          link
-        }
-        twitter {
-          link
-        }
-      }
-      strapiId
-    }
-    clap: file(name: { eq: "clap-svgrepo-com" }) {
-      publicURL
-    }
-    bac: file(name: { eq: "back" }) {
-      publicURL
-    }
-  }
-`
+export const postQuery = graphql``

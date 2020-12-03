@@ -7,8 +7,6 @@ import algoliasearch from "algoliasearch/lite"
 import { InstantSearch, SearchBox, Hits } from "react-instantsearch-dom"
 
 const Index = ({ data, location, pageContext }) => {
-  const posts = data.allStrapiPosts.edges
-  console.log(posts)
   const searchClient = algoliasearch(
     process.env.GATSBY_ALGOLIA_APP_ID,
     process.env.GATSBY_ALGOLIA_ADMIN_KEY
