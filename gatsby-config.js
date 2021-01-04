@@ -1,4 +1,6 @@
-require("dotenv").config()
+require("dotenv").config({
+  path: `.env`,
+})
 
 module.exports = {
   siteMetadata: {
@@ -27,6 +29,16 @@ module.exports = {
         theme_color: `#663399`,
         display: `minimal-ui`,
         icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+      },
+    },
+    {
+      resolve: `gatsby-source-prismic`,
+      options: {
+        repositoryName: "urgosxd-1",
+        accessToken: process.env.API_KEY,
+        schemas: {
+          post: require("./src/schemas/post.json"),
+        },
       },
     },
     {

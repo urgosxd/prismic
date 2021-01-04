@@ -9,8 +9,9 @@ export const POSTCARD = ({ hit }) => {
       <p>
         <Highlight hit={hit} attribute="preview.titulo" tagName="mark" />
       </p>
-      {/* <img src={hit.url} />
-      <Link to={hit.content.content}>GO!</Link> */}
+      <img src={hit.image} />
+
+      <Link to={hit.slug}>GO!</Link>
     </div>
   )
 }
