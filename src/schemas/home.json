@@ -1,0 +1,58 @@
+{
+  "Main": {
+    "nameowner": {
+      "type": "StructuredText",
+      "config": {
+        "single": "heading1",
+        "label": "nameOwner",
+        "placeholder": "Dueño"
+      }
+    },
+    "description": {
+      "type": "Text",
+      "config": {
+        "label": "Description"
+      }
+    },
+    "skills": {
+      "type": "Group",
+      "config": {
+        "fields": {
+          "skill0": {
+            "type": "Text",
+            "config": {
+              "label": "skill0"
+            }
+          },
+          "skill1": {
+            "type": "Text",
+            "config": {
+              "label": "skill1"
+            }
+          },
+          "skill2": {
+            "type": "Text",
+            "config": {
+              "label": "skill2"
+            }
+          },
+          "skill3": {
+            "type": "Text",
+            "config": {
+              "label": "skill3"
+            }
+          }
+        },
+        "label": "skills"
+      }
+    },
+    "avatar": {
+      "type": "Image",
+      "config": {
+        "constraint": {},
+        "thumbnails": [],
+        "label": "Avatar"
+      }
+    }
+  }
+}

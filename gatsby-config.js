@@ -38,6 +38,7 @@ module.exports = {
         accessToken: process.env.API_KEY,
         schemas: {
           post: require("./src/schemas/post.json"),
+          home: require("./src/schemas/home.json"),
         },
       },
     },
@@ -49,6 +50,27 @@ module.exports = {
         queries: require("./src/utils/algolia-queries"),
       },
     },
+    {
+      resolve: `gatsby-plugin-google-fonts`,
+      options: {
+        fonts: [
+          `Merriweather Sans\:300,400,500,600,700,800`,
+          `EB Garamond\:100,300,400,500,600,700,800`,
+          `Roboto`,
+          `Noto Sans SC\:100,300,400,500,600,700,800`,
+        ],
+        display: "swap",
+      },
+    },
+    {
+      resolve: `gatsby-plugin-material-ui`,
+      options: {
+        stylesProvider: {
+          injectFirst: true,
+        },
+      },
+    },
+    `gatsby-plugin-styled-components`,
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,

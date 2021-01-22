@@ -1,8 +1,9 @@
-export default {
-  colors: {},
-  devices: {
-    phone: "@media (max-width: 768px)",
-    tablet: "@media (max-width: 991px)",
-    desktop: "@media (min-width: 991px )",
+import { createMuiTheme } from "@material-ui/core"
+
+export const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: "#1976D2",
+    },
   },
-}
+})

@@ -3,27 +3,32 @@ import {
   LAYOUT,
   ReadingProgress,
   TOCinteractive,
-  TOCstatic,
-  Avatar,
+  MyFabToggle,
 } from "../components"
-import { Container, Row, Col } from "react-bootstrap"
 import { useUsuario } from "../js/store"
 import { DiscussionEmbed } from "disqus-react"
 import { siteUrl } from "../utils/siteConfig"
 import { graphql } from "gatsby"
-import { Parser, ProcessNodeDefinitions } from "html-to-react"
+import { Parser } from "html-to-react"
+import { Grid, Typography } from "@material-ui/core"
+
+import { MyContainer2, Frontmatter, Contenido, MyButton } from "../styles"
+import { useSpring, animated } from "react-spring"
 
 const Post = ({ data, pageContext }) => {
-  //REACTMARKDOWN TOC
+  let postItem = useRef(null)
 
+  // useEffect(() => {
+  //   TweenMax.to(postItem, 1.4, { opacity: 1, y: 20, ease: Power3.easeOut })
+  // })
   console.log(data)
   //DISQUS CONSTS
   const disqusShortname = `blog-hkos9nos5v`
-  // const disqusConfig = {
-  //   identifier: data.strapiPosts.strapiId,
-  //   title: data.strapiPosts.titulo,
-  //   url: `${siteUrl}/${pageContext.slug}`,
-  // }
+  const disqusConfig = {
+    identifier: data.prismicPost.uid,
+    title: data.prismicPost.data.title.text,
+    url: `${siteUrl}/${pageContext.slug}`,
+  }
 
   // TOC
   //Positions
@@ -78,92 +83,85 @@ const Post = ({ data, pageContext }) => {
 
   const [show, setShow] = useState(false)
 
-  useEffect(() => {
-    let timer = setTimeout(() => {
-      setShow(false)
-    }, 2500)
-    return () => {
-      clearTimeout(timer)
-    }
-  })
-
-  //BAR CONSTS
+  const [TocToggle, setTocToggle] = useState(false)
+  // useEffect(() => {
+  //   let timer = setTimeout(() => {
+  //     setShow(false)
+  //   }, 2500)
+  //   return () => {
+  //     clearTimeout(timer)
+  //   }
+  // })
 
   const contenido = new Parser()
 
-  //AVATAR
   const target = useRef(null)
-  console.log(target)
 
-  const asd = target
-  console.log(asd)
+  const props = useSpring({
+    transform: TocToggle ? "translateX(0px)" : "translateX(-300px)",
+  })
   return (
     <LAYOUT>
-      <Container fluid={true} style={{ padding: 0 }}>
-        <section className="introduction">
-          <Row>
-            <Col lg={3}>
-              <Avatar
-                state={show}
-                setState={setShow}
-                // username={}
-                // info={}
-                // avatar={}
-                // social={}
+      <ReadingProgress target={target} />
+      <MyContainer2 fixed={false}>
+        <Grid
+          container
+          spacing={1}
+          // ref={el => {
+          //   postItem = el
+          // }}
+        >
+          <Grid item xs={2}>
+            <div className="stick">
+              {" "}
+              <MyFabToggle
+                estado={TocToggle}
+                onClick={() => setTocToggle(!TocToggle)}
               />
-            </Col>
-            <Col lg={6}>
-              <h1></h1>
+              <animated.div style={props}>
+                <TOCinteractive finalArray={finalArray} target={target} />
+              </animated.div>
+            </div>
+          </Grid>
+
+          <Grid item xs={8}>
+            <Frontmatter>
+              <Typography component="h1">
+                {data.prismicPost.data.title.text}
+              </Typography>
+
               <div>
-                <p className="description"></p>
-                <div>
-                  <ul className="hashtags">
-                    <li></li>
-                  </ul>
-                </div>
-                <div className="avatar">
-                  Autor:
-                  <span onClick={() => setShow(true)}></span>
-                </div>
-                <div className="infoPremature">
-                  <div className="claps">
-                    {/* <img src={data.clap.publicURL} /> */}
-
-                    <span></span>
-
-                    <span></span>
-                  </div>
-                </div>
+                {" "}
+                <span>
+                  Subido desde {data.prismicPost.data.preview[0].date}
+                </span>
+                <span>Autor</span>
+                <hr />
               </div>
+            </Frontmatter>
 
-              <TOCstatic finalArray={finalArray} />
-            </Col>
-          </Row>
-        </section>
+            <Contenido ref={target} className="contenido">
+              {contenido.parse(data.prismicPost.data.content.html)}
+            </Contenido>
 
-        <section className="paper">
-          <Row noGutters={true}>
-            <Col lg={3}>
-              <TOCinteractive finalArray={finalArray} target={target} />
-            </Col>
-            <Col lg={6} className="ccc">
-              <div ref={target} className="contenido">
-                {contenido.parse(data.prismicPost.data.content.html)}
-              </div>
+            <div className="discutir">
+              <DiscussionEmbed
+                shortname={disqusShortname}
+                config={disqusConfig}
+              />
+            </div>
+          </Grid>
+          <Grid item xs={2}>
+            {" "}
+          </Grid>
 
-              <div className="claps">
-                <span>Clap!</span>
-                {/* <img src={data.clap.publicURL} /> */}
-              </div>
-            </Col>
-            <Col lg={3}> caca</Col>
-          </Row>
-        </section>
-        <ReadingProgress target={target} />
-        {/* <div className="discutir">
-          <DiscussionEmbed shortname={disqusShortname} config={disqusConfig} />
-        </div> */}
-      </Container>
+          <div className="formulario netli"></div>
+          <footer>
+            <div>COPYRAITH</div>
+            <div>REDES</div>
+          </footer>
+        </Grid>
+      </MyContainer2>
     </LAYOUT>
   )
 }
@@ -180,7 +178,10 @@ export const postQuery = graphql`
           html
         }
         title {
-          html
+          text
+        }
+        preview {
+          date(formatString: "YYYY MMMM DD")
         }
       }
     }

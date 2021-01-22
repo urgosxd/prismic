@@ -1,5 +1,5 @@
 import styled from "styled-components"
 
-export const NavWrapper = styled.nav``
-
-export const FooterWrapper = styled.footer``
+export const NavWrapper = styled.nav`
+  height: 100px;
+`

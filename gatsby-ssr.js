@@ -1,5 +1,4 @@
 import React from "react"
-import "./main.css"
 import { createGlobalStyle, ThemeProvider } from "styled-components"
 import theme from "./src/js/theme"
 import { UsuarioProvider } from "./src/js/store"
