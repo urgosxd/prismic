@@ -218,7 +218,9 @@ export const TOCinteractive = ({ finalArray, target }) => {
           hijos ? (
             <React.Fragment>
               <ListItem
+                classes={{ button: classes.tocItem }}
                 button
+              disableRipple
                 key={padre.title}
                 onClick={event => {
                   event.preventDefault()
@@ -238,12 +240,12 @@ export const TOCinteractive = ({ finalArray, target }) => {
                       active === headings.tNodes.length)
                   }
                 />
-                {activeEsp[padre.title] ? <ExpandLess /> : <ExpandMore />}
+                {activeEsp[padre.title] ? <ExpandLess style={{color:"gray"}} /> : <ExpandMore style={{color:"gray"}}/>}
               </ListItem>
 
               <Collapse
                 in={activeEsp[padre.title] === false ? false : true}
-                timeout="auto"
+                timeout={1000}
               >
                 <List component="div" disablePadding>
                   {hijos.map(el => (
@@ -265,7 +267,7 @@ export const TOCinteractive = ({ finalArray, target }) => {
               </Collapse>
             </React.Fragment>
           ) : (
-            <ListItem>
+            <ListItem classes={{ button: classes.tocItem }}>
               <ListItemText primary={padre.title} />
             </ListItem>
           )
@@ -290,13 +292,20 @@ export const TOCstatic = ({ finalArray }) => {
 }
 
 const useStyles = makeStyles(theme => ({
-  root: {},
+    root: {
+        fontSize:"0.9rem"
+    },
   nested: {
     paddingLeft: 27,
   },
   toc: {
     paddingLeft: 5,
     paddingTop: 10,
+  },
+  tocItem: {
+    "&:hover": {
+      backgroundColor: "transparent",
+    },
   },
 }))
 // {headings.tTitles &&

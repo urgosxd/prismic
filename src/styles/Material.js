@@ -2,27 +2,22 @@ import React from "react"
 import { Button, Box, Container, ListItemText } from "@material-ui/core"
 import { styled } from "@material-ui/styles"
 
-export const ItemCarrousel = styled(Box)({
+export const DivCarrousel = styled('div')({
+    width:"100%",  
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
-  height: "max-content",
-  "& img": {
-    height: 500,
-    width: "98%",
-    margin: 10,
-    boxShadow: "3px 3px 5px 6px #ccc",
-  },
-  "& div": {
+  height:600,
+  "& div:nth-child(2)": {
     backgroundColor: "#4ECAEE ",
-    marginLeft: "7%",
+    marginLeft: "14%",
     display: "flex",
     fontFamily: "EB Garamond",
     fontWeight: 700,
     color: "rgb(69, 73, 99)",
     fontSize: ".9rem",
     flexDirection: "column",
-    height: 150,
+    height: 200,
     width: 375,
     marginTop: -150,
     padding: "20px 30px",
@@ -30,11 +25,23 @@ export const ItemCarrousel = styled(Box)({
     textAlign: "center",
     justifyContent: "space-between",
     alignItems: "center",
-    "& span:nth-child(1)": {
-      width: "60%",
-      textTransform: "uppercase",
-    },
+      "& .buttonTitulo":{
+          width:"60%",
+          textTransform:"uppercase"
+      }  
   },
+})
+export const ItemCarrousel = styled(({url,...other})=><div {...other}/>)({
+  backgroundImage: (props)=>props.url ? `url(${props.url})`: "green",
+  backgroundRepeat: "no-repeat",
+  height:600,
+  width:"100%",
+  cursor:"grab",
+  backgroundSize: "100% auto",
+  backgroundPosition: "center top",
+  userSelect:"none",
+  touchAction:"none",
+
 })
 
 export const Introduccion = styled(Box)({
@@ -52,13 +59,15 @@ export const Introduccion = styled(Box)({
     fontFamily: "EB Garamond",
     color: "rgb(69, 73, 99)",
     fontWeight: 200,
-    fontSize: "1.885rem",
+    fontSize: "2.25rem",
     lineHeight: "2.465rem",
     maxWidth: "37.7rem",
   },
 })
 
 export const Skills = styled(Box)({
+    marginTop:50,
+    marginBottom:75,
   "& div span": {
     fontFamily: "EB Garamond",
     color: "rgb(119, 124, 155)",

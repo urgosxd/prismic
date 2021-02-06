@@ -11,6 +11,43 @@ export const LayoutWrapper = styled.div`
     background-color: red;
   }
 
+  & .Introduccion {
+    margin-bottom: 20px;
+    & h1 {
+      font-family: Merriweather Sans;
+      color: rgb(35, 48, 68);
+
+      @media (min-width: ${props => props.theme.points.xs}) {
+        font-size: 2.6rem;
+      line-height: 3rem;
+
+      }
+      @media (min-width: ${props => props.theme.points.lg}) {
+        font-size: 3.625rem;
+      line-height: 3.48rem;
+        
+      }
+      font-weight: 800;
+      margin-top: 3vw;
+      max-width: 31.9rem;
+    }
+    & p {
+      font-family: EB Garamond;
+      color: rgb(69, 73, 99);
+      font-weight: 200;
+@media (min-width: ${props => props.theme.points.xs}) {
+        font-size:1.3rem;
+        line-height:1.5rem;
+      }
+     @media (min-width: ${props => props.theme.points.lg}) {
+      font-size: 2.25rem;
+      line-height: 2.465rem;
+
+
+      } 
+      max-width: 37.7rem;
+    }
+  }
   & .publicaciones {
     font-family: "Merriweather Sans";
     color: rgb(69, 73, 99);
@@ -26,25 +63,40 @@ export const LayoutWrapper = styled.div`
     top: 25px;
     left: 0;
   }
-  
-  & .slider {
-    width:100%;
-    display:flex;
-    height:100vh;
-    overflow:hidden;
+
+  & .App {
+    user-select: none;
   }
 
-  & .slider .slider-item {
-  flex-shrink:0;
-  width:100%;
-  padding:50px;
-  display:flex;
-  justify-content:center;
+  & .frame {
+    height: 600px;
+    width: 300px;
+    position: relative;
+    overflow: hidden;
   }
 
-  & .slider .slider-item img{
-  width:50%;
-  object-fit:cover;
+  & .Pubg {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+  }
+  & .Pubg .derecha {
+    top: 100px;
+    right: -10px;
+    position: fixed;
+    z-index: 1000;
+  }
+  & .Pubg .negro {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    position: fixed;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
   }
 `
-

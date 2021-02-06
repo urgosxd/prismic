@@ -83,7 +83,7 @@ const Post = ({ data, pageContext }) => {
 
   const [show, setShow] = useState(false)
 
-  const [TocToggle, setTocToggle] = useState(false)
+  const [TocToggle, setTocToggle] = useState(true)
   // useEffect(() => {
   //   let timer = setTimeout(() => {
   //     setShow(false)
@@ -102,7 +102,6 @@ const Post = ({ data, pageContext }) => {
   })
   return (
     <LAYOUT>
-      <ReadingProgress target={target} />
       <MyContainer2 fixed={false}>
         <Grid
           container

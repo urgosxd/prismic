@@ -1,5 +1,5 @@
 import React from "react"
-import { createGlobalStyle } from "styled-components"
+import { createGlobalStyle,ThemeProvider as ThemeStyled } from "styled-components"
 import { theme } from "./src/js/theme"
 import { UsuarioProvider } from "./src/js/store"
 import { ThemeProvider } from "@material-ui/core"
@@ -16,7 +16,9 @@ const Globalstyle = createGlobalStyle`
     font: 137.5%/1.45 EB Garamond;
     body{
       font-feature-settings: "kern", "liga", "clig", "calt";
+      margin:0px;
     }
+
   }
   *,
   *::before,
@@ -27,8 +29,10 @@ const Globalstyle = createGlobalStyle`
 `
 
 export const wrapRootElement = ({ element }) => (
+    <ThemeStyled theme={theme}>
   <ThemeProvider theme={theme}>
     <Globalstyle />
     <UsuarioProvider>{element}</UsuarioProvider>
   </ThemeProvider>
+    </ThemeStyled>
 )
